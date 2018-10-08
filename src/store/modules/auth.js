@@ -13,7 +13,7 @@ export default {
         data = {}
       }
       state.user = data.user
-      state.token = data.token
+      state.token = data.access_token
       localStorage.setItem('rest_admin_auth', JSON.stringify(data))
     },
   },
