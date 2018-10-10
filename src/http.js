@@ -9,7 +9,7 @@ axios.defaults.baseURL = API_URI
 axios.interceptors.request.use(config => {
   store.commit(types.START_LOADING)
 //  config.headers.Authorization = 'Bearer ' + store.state.auth.token
-  config.headers.Authenticate = 'token ' + store.state.auth.token
+  config.headers.Authentication = 'token ' + store.state.auth.token
   return config
 })
 axios.interceptors.response.use(response => {
