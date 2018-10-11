@@ -6,7 +6,4 @@ module.exports = {
         "commonjs": true
     },
     "extends": "eslint:recommended",
-    "parserOptions": {
-        "sourceType": "module"
-    }
 };
