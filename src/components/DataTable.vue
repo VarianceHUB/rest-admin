@@ -87,7 +87,7 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
-          <b-btn size="sm" v-for="(button, key) in _.get(actions, 'addon')" :key="key" v-bind="button">{{button.label}}</b-btn>
+          <b-btn size="sm" v-for="(button, key) in _.get(actions, 'addon')" :key="key" v-bind="button" :data-id="row.item._id">{{button.label}}</b-btn>
           <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(actions, 'buttons.show') !== false">
             <i class="icon-eye"></i>
             {{$t('actions.view')}}
