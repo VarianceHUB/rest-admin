@@ -24,6 +24,7 @@
     </div>
     <div slot="footer">
       <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
+      <b-btn @click.prevent="print()">Print</b-btn>
     </div>
   </div>
 </template>
@@ -86,6 +87,9 @@ export default {
     },
   },
   methods: {
+    print: function() {
+      window.print();
+    },
     fetch() {
       this.$http.get(this.resourceUri, {
         params: {
