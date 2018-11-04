@@ -6,7 +6,8 @@
 
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name" v-if="field.label !== false">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="getFieldId(name)" 
+        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" 
+        @input="setValue(name, arguments[0], arguments[1])" :value="model[name]" :id="getFieldId(name)" 
         :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
 
@@ -58,7 +59,7 @@
       
 
       <slot name="actions" v-if="!subForm">
-        <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
+        <b-button type="submit" variant="primary" class="mr-2" ref="submitButton">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
     </component>
@@ -110,6 +111,7 @@ export default {
       default: null
     },
     value: {
+      type: Object,
       default() {
         return {};
       }
@@ -163,7 +165,7 @@ export default {
   },
   watch: {
     value(val) {
-      this.model = val;
+      this.model = Object.assign({}, val);
     },
     
   },
@@ -201,17 +203,16 @@ export default {
       return name
     },
     setValue(name, value, lang) {
-      // console.log('setValue', name, value, lang, this.isSubForm)
-      if (!this.fields[name].multilingual) {
-        return this.$set(this.model, name, value);
-        // return _.set(this.model, name, value);
-      }
-      if (lang && !_.isObject(this.model[name])) {
+      const isIntl = this.fields[name].multilingual || this.fields[name].intl
+      if (!isIntl) {
+        this.$set(this.model, name, value);
+        // _.set(this.model, name, value);
+      } else if (lang && !_.isObject(this.model[name])) {
         this.$set(this.model, name, {});
+      } else {
+        this.$set(this.model[name], lang, value);
       }
-      this.$set(this.model[name], lang, value);
-      // _.set(this.model, key, value);
-      // console.log(key, value)
+      return this.$emit('input', this.model)
     },
     titlize() {},
     isShowField(field) {
@@ -273,12 +274,8 @@ export default {
     }
   },
   mounted() {
-    this.model = this.value;
+    this.model = Object.assign({}, this.value);
     
-    this.$watch('model', val => {
-      this.$emit('input', val)
-    }, {deep: true})
-
     for (let [k, v] of Object.entries(this.fields)) {
       if (v.type === "object" && !this.model[k]) {
         this.$set(this.model, k, {});
