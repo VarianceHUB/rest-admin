@@ -3,7 +3,7 @@
     <div class="data-table">
       <div v-if="site.grid_style === 1">
         <div class="pb-3">
-          <b-btn class="mr-2" :to="'/' + resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
+          <b-btn class="mr-2" :to="'/rest/' + resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
           <i class="icon-plus"></i>
           {{$t('actions.create')}}
           </b-btn>
