@@ -10,7 +10,15 @@ export default {
   mutations: {
     [types.SET_AUTH](state, data) {
       if (!data) {
-        data = {}
+        data = {
+          token: null,
+          user: null,
+          result: {
+            login: {
+              access_token: null
+            }
+          }
+        }
       }
       state.user = data.user
       state.token = data.result.login.access_token
@@ -21,11 +29,16 @@ export default {
     [types.GET_AUTH]({ commit }) {
       let auth = {}
       try {
-        auth = JSON.parse(localStorage.getItem('rest_admin_auth') || '{}')
+        auth = JSON.parse(localStorage.getItem('rest_admin_auth'))
       } catch (e) {
         auth = {
           token: null,
-          user: null
+          user: null,
+          result: {
+            login: {
+              access_token: null
+            }
+          }
         }
       }
       commit(types.SET_AUTH, auth)

@@ -9,7 +9,7 @@ axios.defaults.baseURL = API_URI
 global.LOADING_ENABLED = true
 axios.interceptors.request.use(config => {
   global.LOADING_ENABLED && store.commit(types.START_LOADING)
-  config.headers.Authentication = 'token ' + store.state.auth.token
+  config.headers.Authorization = 'Bearer ' + store.state.auth.token
   return config
 })
 axios.interceptors.response.use(response => {
